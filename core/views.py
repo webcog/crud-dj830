@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from core.models import Student
 # Create your views here.
 
@@ -41,3 +41,23 @@ def viewSudent(request):
 
 
     return render(request, 'viewstudent.html', context)
+
+def update_student(request,pk):
+    student = get_object_or_404(Student, pk=pk)
+    if request.method == "POST":
+        student.first_name =  request.POST.get('fname')
+        student.last_name = request.POST.get('lname')
+        student.father_name = request.POST.get('fathername')
+        student.email = request.POST.get('email')
+        student.addressOne = request.POST.get('inputAddressOne')
+        student.addressTwo = request.POST.get('inputAddressTwo')
+        student.cnic = request.POST.get('cnic')
+        student.contact = request.POST.get('contact')
+
+        student.save()
+        return redirect('viewStudent')
+    context = {
+        'student':student
+    }
+
+    return render(request, 'update.html', context)
